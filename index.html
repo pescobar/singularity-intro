@@ -10,11 +10,9 @@
 
 class: center, middle
 
-# Working with Singularity Containers
+# Intro to Singularity Containers
 
 Pablo Escobar Lopez
-
-https://scicore-unibas-ch.github.io/singularity-slides/
 
 http://singularity.lbl.gov/
 
@@ -42,17 +40,7 @@ Except where otherwise noted, this presentation is licensed under [Creative Comm
 4. History of containers
 5. Docker vs Singularity
 6. Singularity workflow
-7. Installing and testing Singularity
-8. Writing a Singularity definition file
-9. Using host resources
-10. Distributing Singularity containers
-
-
----
-
-  ## Audience
-
-Researchers/Developers willing to learn how to package their applications and workflows using Singularity containers
+7. Examples
 
 ---
 
@@ -64,28 +52,8 @@ Researchers/Developers willing to learn how to package their applications and wo
 
 - Differences between Docker and Singularity. Pros and Cons
 
-- Learn how to use Singularity
+- Some practical examples with Singularity
 
-  - Execute Singularity containers
-  - Create Singularity containers from scratch
-  - Share Singularity containers
-
----
-
-  ### Requirements to follow the course
-
-- Your laptop with:
-
-  - [VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com)
-
-- Linux shell knowledge
-
-- If you are using a Windows laptop you also need [Cygwin](https://www.cygwin.com/)
-  to have a bash shell. During the Cygwin installation make sure to install all the 
-  ssh related packages as in this screenshot:
-
-.center[![:scale 60%](img/cygwin-install-ssh-packages.png)]
-  
 ---
 
 class: center, middle
@@ -114,24 +82,6 @@ Your users could also be less technically inclined to deal with dependencies.
 ---
 
 
-# Problem (for users)
-
-Suppose you want to run some piece of software.
-
-First-off, you really would like some sort of turn-key solution.
-
-The build instuctions indicate 5-years-old out of date libraries
-  on top of a similarly old OS distribution.
-
-And no, the original developer is most certainly no longer available.
-
-You also don't fully trust that this software will not mess up your OS.
-
-Or, you want to run it on a remote server for which you don't
-  even have the privileges to comfortably install all the dependencies.
-
----
-
 # Problem (for researchers)
 
 Suppose you have a piece of scientific software you used
@@ -154,8 +104,11 @@ To enable reproducible science with the help of software packaging,
 
 Suppose you have one hundred users, each requesting certain software.
 
-Some of it needs to be carefully built from scratch,
-  as there are no prebuilt packages.
+Some of those applications have very old dependencies very hard (or imposible) 
+to compile from sources in your system 
+
+Some of those application only work with linux distribution X . "it works in 
+my computer" the developer said ;). Of course you use a different distro
 
 Some of the software works with mutually-incompatible library versions.
   Possibly these have known security issues.
@@ -174,11 +127,6 @@ And finally, _you most certainly don't trust_ any of this software
 * BYOE: Bring Your Own Environment
 
   A way to capture the prerequisites and environment together with the software.
-
-* Mitigate security risks
-
-  Provide a measure of isolation between the software running on a system.
-  No security is perfect, but some is better than none.
 
 ---
 
@@ -206,6 +154,13 @@ Linux on Windows, etc.
 
 \* MacOS being a stinker here, of course, with their license.
 
+---
+
+## Virtual machines
+
+.center[![:scale 40%](img/vms-schema.png)]
+
+image source: [http://www.admin-magazine.com/HPC/Articles/Singularity-A-Container-for-HPC](http://www.admin-magazine.com/HPC/Articles/Singularity-A-Container-for-HPC)
 ---
 
 # Virtual Machines: the good parts
@@ -259,6 +214,13 @@ You can package other different Linux distributions, and with the exception
 From the point of view of the application, it's running on the same hardware
   as the host, hence containers are called
   .highlight[operating-system-level virtualization].
+
+---
+## Containers
+
+.center[![:scale 80%](img/vm_vs_singularity.png)]
+
+image source: [http://www.admin-magazine.com/HPC/Articles/Singularity-A-Container-for-HPC](http://www.admin-magazine.com/HPC/Articles/Singularity-A-Container-for-HPC)
 
 ---
 
@@ -319,6 +281,21 @@ Those facilities led to creation of solutions for containerization, notably LXC 
 
 ---
 
+## Main technologies used to create containers
+
+All the containers solutions (LXC, Docker, Singularity...etc) use namespaces and cgroups 
+to isolate the containers from the host
+
+These two technologies (namespaces and cgroups) are provided by the Linux kernel
+
+The container solution "only" provides a easy way for the end user to automate the creation
+of the required namespaces and cgroups
+
+In the case of Docker it's the docker daemon who does the job. In Singularity it's a setuid
+binary who does it.
+
+---
+
 # Docker
 
 Docker came about in 2013 and since has been on a meteoric rise
@@ -336,28 +313,37 @@ Docker encourages splitting software into microservice chunks
 
 ## Docker concerns
 
-.small[Docker uses a pretty complicated model of images/volumes/metadata,
+Docker uses a pretty complicated model of images/volumes/metadata,
 and it is not always very transparent how this is stored.
 
 Also, isolation features require superuser privileges;
 Docker has a persistent daemon running with root privileges
 and many container operations require root as well. In practice,
-a user who can run docker containers can get root access.
+.highlight[a user who can run docker containers can get root access]
 
 Docker is mainly designed and used to run [microservices](https://en.wikipedia.org/wiki/Microservices) like web servers, databases,
 mail servers, etc and not to run command line utilies like one usually does in an HPC cluster.
 Microservices also require orchestration tools like [docker-compose](https://docs.docker.com/compose/),
 [docker swarm](https://docs.docker.com/engine/swarm/) or [kubernetes](https://docs.docker.com/engine/swarm/)
 
+---
+
+## Docker concerns
+
+The user IDs inside and outside the docker containers are not easily mapped. 
+
+This means that processes running inside the container can run with different UID than the user
+who is executing the container. Because of this the generated files won't be accessible by the user "outside"
+the container
+
 These concerns make Docker undesirable in multi-user, shared HPC environments.
 
 Out of these concerns, and the scientific community, came Singularity.
-]
 ---
 
 # Singularity
 
-.small[Singularity is quite similar in principle to Docker. In fact,
+Singularity is quite similar in principle to Docker. In fact,
 it's pretty straightforward to convert a Docker container
 to a Singularity image.
 
@@ -369,10 +355,21 @@ The privilege problem was a concern from the ground-up, and solved by having a
 `setuid`-enabled binary that can accomplish container startup - and drop
 privileges completely as soon as practical.
 
-Privilege elevation inside a Singularity container is impossible (in theory ;): to be root inside,
-you have to be root outside. And users don't need explicit root
-access to execute existing containers]
 
+---
+
+# Singularity
+
+Privilege elevation inside a Singularity container is impossible (in theory ;): to be root inside,
+you have to be root outside.
+
+Users don't need explicit root access to execute existing containers
+
+Singularity automatically maps the user IDs . All the processes inside the container will
+run with the same user ID as the user executing the container. This means
+that also the files generated inside the container will have the right access permissions.
+
+EXAMPLE????
 
 ---
 
