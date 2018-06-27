@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Working with Containers</title>
+    <title>Intro to Singularity containers</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="css/common.css">
   </head>
@@ -13,6 +13,8 @@ class: center, middle
 # Intro to Singularity Containers
 
 Pablo Escobar Lopez
+
+https://pescobar.github.io/singularity-intro/
 
 http://singularity.lbl.gov/
 
@@ -58,7 +60,7 @@ Except where otherwise noted, this presentation is licensed under [Creative Comm
 
 class: center, middle
 
-# The Problem(s)
+# The Problem(s) we would like to solve
 
 ---
 
@@ -104,11 +106,11 @@ To enable reproducible science with the help of software packaging,
 
 Suppose you have one hundred users, each requesting certain software.
 
-Some of those applications have very old dependencies very hard (or imposible) 
+Some of those applications have ancient dependencies very hard (or imposible) 
 to compile from sources in your system 
 
-Some of those application only work with linux distribution X . "it works in 
-my computer" the developer said ;). Of course you use a different distro
+Some of those application only work with linux distribution "XXX" . "it works in 
+my computer" the developer said ;). Of course your cluster runs a different distro
 
 Some of the software works with mutually-incompatible library versions.
   Possibly these have known security issues.
@@ -169,17 +171,17 @@ image source: [http://www.admin-magazine.com/HPC/Articles/Singularity-A-Containe
 
   Whatever your environment is, you can package it fully, OS and everything.
 
-* Security risks are truly minimized.
-
-  Very narrow and secured bridge between the guest and the host means little
-  opportunity for a bad actor to break out of isolation.
-
 * Easy to precisely measure out resources
 
   The contained application, together with its OS, has restricted access to
   hardware: you measure out its disk, memory and alloted CPU.
 
 * More Flexible. More OS are supported
+
+* Security risks are truly minimized.
+
+  Very narrow and secured bridge between the guest and the host means little
+  opportunity for a bad actor to break out of isolation.
 ]
 ---
 
@@ -283,7 +285,7 @@ Those facilities led to creation of solutions for containerization, notably LXC 
 
 ## Main technologies used to create containers
 
-All the containers solutions (LXC, Docker, Singularity...etc) use namespaces and cgroups 
+All the recent containers solutions (LXC, Docker, Singularity...etc) use namespaces and cgroups 
 to isolate the containers from the host
 
 These two technologies (namespaces and cgroups) are provided by the Linux kernel
@@ -333,7 +335,7 @@ Microservices also require orchestration tools like [docker-compose](https://doc
 The user IDs inside and outside the docker containers are not easily mapped. 
 
 This means that processes running inside the container can run with different UID than the user
-who is executing the container. Because of this the generated files won't be accessible by the user "outside"
+who is executing the container. Because of this, the generated files won't be accessible by the user "outside"
 the container
 
 These concerns make Docker undesirable in multi-user, shared HPC environments.
@@ -367,9 +369,8 @@ Users don't need explicit root access to execute existing containers
 
 Singularity automatically maps the user IDs . All the processes inside the container will
 run with the same user ID as the user executing the container. This means
-that also the files generated inside the container will have the right access permissions.
-
-EXAMPLE????
+that also the files generated inside the container will have the right access permissions outside
+the container.
 
 ---
 
