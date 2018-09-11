@@ -728,10 +728,10 @@ To test our freshly-created container, we can invoke an interactive shell
   to explore it with .highlight[`shell`]:
 
 ```terminal
-vagrant@vm:~$ singularity shell centos-6.img
+vagrant@vm:~$ singularity shell centos-6.simg
 Singularity: Invoking an interactive shell within container...
 
-Singularity centos-6.img:~>
+Singularity centos-6.simg:~>
 ```
 
 At this point, you're within the environment of the container.
@@ -739,7 +739,7 @@ At this point, you're within the environment of the container.
 We can verify we're "running" CentOS:
 
 ```terminal
-Singularity centos-6.img:~> cat /etc/centos-release
+Singularity centos-6.simg:~> cat /etc/centos-release
 CentOS release 6.9 (Final)
 ```
 
@@ -750,7 +750,7 @@ CentOS release 6.9 (Final)
 Inside the container, we are the same user:
 
 ```terminal
-Singularity centos-6.img:~> whoami
+Singularity centos-6.simg:~> whoami
 vagrant
 ```
 
@@ -773,16 +773,16 @@ If we launch `singularity` with `sudo`, we would be `root` inside the container.
 .small[Additionally, our home folder, and the folder we've invoked Singularity from,
 are accessible inside the container (by default):
 ```
-Singularity centos-6.img:~> ls ~
-centos-6.img  src
+Singularity centos-6.simg:~> ls ~
+centos-6.simg  src
 ```
 
 We have access to the bound folders with the same rights as outside,
   so we can for example write to:
 
 ```
-Singularity centos-6.img:~> touch ~/test_container
-Singularity centos-6.img:~> exit
+Singularity centos-6.simg:~> touch ~/test_container
+Singularity centos-6.simg:~> exit
 vagrant@vm:~$ ls ~/test_container
 /home/vagrant/test_container
 ```
@@ -800,7 +800,7 @@ Besides the interactive shell, we can execute any command
   inside the container directly with .highlight[`exec`]:
 
 ```
-vagrant@vm:~$ singularity exec centos-6.img cat /etc/centos-release
+vagrant@vm:~$ singularity exec centos-6.simg cat /etc/centos-release
 CentOS release 6.9 (Final)
 ```
 
@@ -816,15 +816,15 @@ Standard input/output are processed as normal by Singularity.
 You can redirect them:
 
 ```
-vagrant@vm:~$ singularity exec centos-6.img echo Boo! > ~/test_container
-vagrant@vm:~$ singularity exec centos-6.img cat < ~/test_container
+vagrant@vm:~$ singularity exec centos-6.simg echo Boo! > ~/test_container
+vagrant@vm:~$ singularity exec centos-6.simg cat < ~/test_container
 Boo!
 ```
 
 You can use containers in pipelines:
 
 ```
-$ singularity exec centos-6.img echo Boo! | singularity exec centos-6.img cat
+$ singularity exec centos-6.simg echo Boo! | singularity exec centos-6.simg cat
 Boo!
 ```
 
@@ -849,10 +849,10 @@ module load Singularity/2.4
 RefGenome='~/scicore-pipeline2-input-data/RefGenome/igenomes/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/'
 
 echo 'SAM to sorted BAM...'
-singularity exec pipeline2.img samtools view -bS output/bowtie2/yeast_reseq_ds-bt2aln.sam | singularity exec pipeline2.img samtools sort - --threads ${SLURM_CPUS_PER_TASK} -o output/samtools/yeast_reseq_ds-bt2aln.s.bam
+singularity exec pipeline2.simg samtools view -bS output/bowtie2/yeast_reseq_ds-bt2aln.sam | singularity exec pipeline2.simg samtools sort - --threads ${SLURM_CPUS_PER_TASK} -o output/samtools/yeast_reseq_ds-bt2aln.s.bam
 
 echo 'calling variants with FreeBayes...'
-singularity exec pipeline2.img freebayes -f $RefGenome/WholeGenomeFasta/genome.fa output/samtools/yeast_reseq_ds-bt2aln.s.bam > output/freebayes/yeast_reseq_ds-bt2aln.s.vcf
+singularity exec pipeline2.simg freebayes -f $RefGenome/WholeGenomeFasta/genome.fa output/samtools/yeast_reseq_ds-bt2aln.s.bam > output/freebayes/yeast_reseq_ds-bt2aln.s.vcf
 
 ```
 
@@ -866,10 +866,10 @@ singularity exec pipeline2.img freebayes -f $RefGenome/WholeGenomeFasta/genome.f
 .small[First create an [empty writable image](http://singularity.lbl.gov/docs-build-container#--writable) 2048MB in size and initialize it with a centos7 docker image
 
 ```
-vagrant@vm:~$ sudo singularity image.create --size 2048 centos7.img
-vagrant@vm:~$ sudo singularity build --writable centos7.img docker://centos:7
-vagrant@vm:~$ sudo singularity shell --writable centos7.img
-Singularity centos7.img:~> whoami
+vagrant@vm:~$ sudo singularity image.create --size 2048 centos7.simg
+vagrant@vm:~$ sudo singularity build --writable centos7.simg docker://centos:7
+vagrant@vm:~$ sudo singularity shell --writable centos7.simg
+Singularity centos7.simg:~> whoami
 root
 ```
 
@@ -878,8 +878,8 @@ It's not available in the default distribution,
 we will need to enable a community repository and install it:
 
 ```
-Singularity centos7.img:~> yum -y --enablerepo=extras install epel-release
-Singularity centos7.img:~> yum -y install fortune-mod
+Singularity centos7.simg:~> yum -y --enablerepo=extras install epel-release
+Singularity centos7.simg:~> yum -y install fortune-mod
 ```
 
 .exercise[
@@ -923,7 +923,7 @@ A container can have a "default" command which is run without specifying it.
 Inside the container, it's `/singularity`. Let's try modifying it:
 
 ```
-vagrant@vm:~$ sudo singularity exec -w centos7.img vi /singularity
+vagrant@vm:~$ sudo singularity exec -w centos7.simg vi /singularity
 ```
 
 By default you'll see the following:
@@ -956,10 +956,10 @@ Now we can invoke it with .highlight[`run`] or even by
   .highlight[running the image]:
 
 ```terminal
-vagrant@vm:~$ singularity run centos7.img
+vagrant@vm:~$ singularity run centos7.simg
 [..some wisdom or humor..]
 
-vagrant@vm:~$ ./centos7.img
+vagrant@vm:~$ ./centos7.simg
 [..some more wisdom or humor..]
 ```
 
@@ -1138,7 +1138,7 @@ From: centos:7
 [build](http://singularity.lbl.gov/docs-build-container) the container using the definition (.highlight[requires root]):
 
 ```
-vagrant@vm:~$ sudo singularity build fortune.img fortune.def
+vagrant@vm:~$ sudo singularity build fortune.simg fortune.def
 ```
 
 .exercise[
@@ -1220,7 +1220,7 @@ See `singularity help run` for more information.
 
 module load Singularity/2.4
 
-singularity exec pipeline2.img samtools view -bS yeast_reseq_ds-bt2aln.sam | singularity exec pipeline2.img samtools sort - --threads ${SLURM_CPUS_PER_TASK} -o yeast_reseq_ds-bt2aln.s.bam
+singularity exec pipeline2.simg samtools view -bS yeast_reseq_ds-bt2aln.sam | singularity exec pipeline2.simg samtools sort - --threads ${SLURM_CPUS_PER_TASK} -o yeast_reseq_ds-bt2aln.s.bam
 
 ```
 
