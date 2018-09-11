@@ -615,15 +615,16 @@ You can find the configuration of Singularity under `/usr/local/etc/singularity`
 
 # Container images
 
-A Singularity image is, for practical purposes, a filesystem tree
-  that will be presented to the applications running inside it.
+A container needs to be somehow bootstrapped to contain a base
+  operating system before further modifications can be made.
+
+A container image is a filesystem tree that will be presented 
+  to the applications running inside it.
 
 A Docker container is built with a series of _layers_ that are
   stacked upon each other to form the filesystem. Singularity
   collapses those into a single, portable file.
 
-A container needs to be somehow bootstrapped to contain a base
-  operating system before further modifications can be made.
 
 <!--
 
