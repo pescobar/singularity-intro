@@ -772,9 +772,9 @@ If we launch `singularity` with `sudo`, we would be `root` inside the container.
 
 ---
 
-# Default mounts
+# Default folders mounts
 
-.small[Additionally, your home folder, and the folder we've invoked Singularity from,
+.small[Additionally, your home folder and the folder we've invoked Singularity from
 are accessible inside the container (by default):
 ```
 Singularity centos-6.simg:~> ls ~
@@ -796,6 +796,22 @@ The current working directory inside the container is the same
 
 note for sysadmins: Check `/usr/local/etc/singularity/singularity.conf` for defaults
 ]
+---
+
+# Custom folder mounts
+
+You can mount custom folders inside the container using the `--bind` flag
+
+```terminal
+vagrant@vm:~$ touch /var/tmp/file.dummy
+
+vagrant@vm:~$ singularity shell -B /var/tmp:rw centos-6.simg 
+Singularity: Invoking an interactive shell within container...
+
+Singularity centos-6.simg:~> ls /var/tmp/
+file.dummy
+```
+
 ---
 
 # Running a command directly
