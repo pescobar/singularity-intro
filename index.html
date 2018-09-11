@@ -16,7 +16,7 @@ Pablo Escobar Lopez
 
 https://pescobar.github.io/singularity-intro/
 
-http://singularity.lbl.gov/
+https://www.sylabs.io/
 
 ---
 
@@ -580,7 +580,7 @@ user@laptop:~/singularity-vm$ vagrant ssh -c /bin/bash <<EOF
     sudo ln -s /usr/local/etc/bash_completion.d/singularity /etc/profile.d/singularity.sh
 EOF
 ```
-Check the [official docs](http://singularity.lbl.gov/install-linux) if you want to
+Check the [official docs](https://www.sylabs.io/guides/2.6/user-guide/installation.html#install-on-linux) if you want to
 create a RPM or DEB package for your distribution (not needed for this course)
 
 ---
@@ -1024,12 +1024,12 @@ From: centos:7
 
 There are 2 sections for setup commands (essentially shell scripts):
 
-1. [setup](http://singularity.lbl.gov/docs-recipes#setup) for commands to be executed .highlight[outside the container].
+1. [setup](https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#setup) for commands to be executed .highlight[outside the container].
 
   You can use `$SINGULARITY_ROOTFS` to access the container's filesystem,
     as it is mounted on the host during the build.
 
-2. [post](http://singularity.lbl.gov/docs-recipes#post) for commands to be executed .highlight[inside] the container.
+2. [post](https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#post) for commands to be executed .highlight[inside] the container.
 
   This is a good place to set up the OS, such as installing packages.
 
@@ -1056,7 +1056,7 @@ From: centos:7
 
 # Adding files to the container
 
-An additional section, [files](http://singularity.lbl.gov/docs-recipes#files), allows to copy files or folders to the container.
+An additional section, [files](https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#files), allows to copy files or folders to the container.
 
 We won't be using it here, but the format is as follows (like `cp`, but destination is inside):
 
@@ -1074,7 +1074,7 @@ Note that this happens _after_ `%post`. If you need the files earlier, copy them
 
 You can specify a script to be sourced when something is run in the container.
 
-This goes to the [environment section](http://singularity.lbl.gov/docs-recipes#environment). Treat it like `.bash_profile`.
+This goes to the [environment section](https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#environment). Treat it like `.bash_profile`.
 
 ```
 %environment
@@ -1091,7 +1091,7 @@ Note that the host environment variables are passed on by default as well, unles
 
 # Setting up the runscript
 
-The runscript (`/singularity`) is specified in the [runscript](http://singularity.lbl.gov/docs-recipes#runscript) section.
+The runscript (`/singularity`) is specified in the [runscript](https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#runscript) section.
 
 Let's use the file we copied at `%setup` and run `fortune`:
 
@@ -1109,7 +1109,7 @@ Let's use the file we copied at `%setup` and run `fortune`:
 You can specify commands to be run at the end of the build process inside the container
   to perform sanity checks.
 
-Use [test](http://singularity.lbl.gov/docs-recipes#test) section for this:
+Use [test](https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#test) section for this:
 
 ```
 %test
