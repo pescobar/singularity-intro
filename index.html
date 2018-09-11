@@ -883,7 +883,7 @@ singularity exec pipeline2.simg freebayes -f $RefGenome/WholeGenomeFasta/genome.
 
 ### Option 1: Create a writable singularity image for development
 
-.small[First create an [empty writable image](http://singularity.lbl.gov/docs-build-container#--writable) 2048MB in size and initialize it with a centos7 docker image
+.small[First create an [empty writable image](https://www.sylabs.io/guides/2.6/user-guide/quick_start.html#writable-image) 2048MB in size and initialize it with a centos7 docker image
 
 ```
 vagrant@vm:~$ sudo singularity image.create --size 2048 centos7.simg
@@ -913,10 +913,10 @@ Singularity centos7.simg:~> yum -y install fortune-mod
 
 ### Option 2: Create a sandbox environment for development
 
-.small[Another approach is to create a [sandbox](http://singularity.lbl.gov/docs-build-container#--sandbox) for development.
+.small[Another approach is to create a [sandbox](https://www.sylabs.io/guides/2.6/user-guide/quick_start.html#sandbox-directory) for development.
 This is the approach recommended by the singularity developers.
 
-A [sandbox](http://singularity.lbl.gov/docs-build-container#--sandbox) is just a plain folder which contains all the files of the container.
+A [sandbox](https://www.sylabs.io/guides/2.6/user-guide/quick_start.html#sandbox-directory) is just a plain folder which contains all the files of the container.
 
 One of the advantages of this approach is that you don't need to define a fixed size in advance.
 ]
@@ -990,7 +990,7 @@ vagrant@vm:~$ ./centos7.simg
 Instead of taking some base image and making changes to it by hand,
   we want to make this build process reproducible.
 
-This is achieved with [singularity recipes](http://singularity.lbl.gov/docs-recipes)
+This is achieved with [singularity recipes](https://www.sylabs.io/guides/2.6/user-guide/quick_start.html#singularity-recipes)
 
 Let's try to retrace out steps to obtain a fortune-telling CentOS container.
 
@@ -1002,7 +1002,7 @@ Let's try to retrace out steps to obtain a fortune-telling CentOS container.
 
 # Bootstrapping
 
-The definition file starts with a [header section](http://singularity.lbl.gov/docs-recipes#header).
+The definition file starts with a [header section]().
 
 The key part of it is the `Bootstrap:` configuration.
 
