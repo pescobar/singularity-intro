@@ -1002,7 +1002,7 @@ Let's try to retrace out steps to obtain a fortune-telling CentOS container.
 
 # Bootstrapping
 
-The definition file starts with a [header section]().
+The definition file starts with a [header section](https://www.sylabs.io/guides/2.6/user-guide/container_recipes.html#header).
 
 The key part of it is the `Bootstrap:` configuration.
 
@@ -1155,7 +1155,7 @@ From: centos:7
 
 # Building a container from definition file
 
-[build](http://singularity.lbl.gov/docs-build-container) the container using the definition (.highlight[requires root]):
+[build](https://www.sylabs.io/guides/2.6/user-guide/build_a_container.html) the container using the definition (.highlight[requires root]):
 
 ```
 vagrant@vm:~$ sudo singularity build fortune.simg fortune.def
